@@ -25,16 +25,20 @@ class AES : IAlgorithm {
             {0, 0, 0, 0},
             {0, 0, 0, 0}
         };
-        foreach(byte b in byteArray) {
+        for(int k = 0; k < byteArray.Length; k ++) {
+
+            byte b = byteArray[k];
 
             block[n, i] = b;
+            Console.WriteLine("i: " + i + " n: " + n + " b: " + b);
 
             if(i < 3) {
                 i ++;
-            } else if (n <3) {
+            } else if (i == 3 && n <3) {
                 n ++;
                 i = 0;
             } else {
+                Console.WriteLine("Block fertig");
                 result.Add(block);
                 i = 0;
                 n = 0;
@@ -45,7 +49,24 @@ class AES : IAlgorithm {
                     {0, 0, 0, 0}
                 };
             }
+
+            if (k == byteArray.Length - 1) {
+                Console.WriteLine("Block fertig");
+                result.Add(block);
+            }
         }
         return result;
+    }
+
+    public void printByteBlock(List<byte[,]> blocks) {
+        foreach(byte[,] block in blocks) {
+            for(int i = 0; i < 4; i ++) {
+                for(int n = 0; n < 4; n ++) {
+                    Console.Write(block[i, n] + " ");
+                }
+                Console.WriteLine();
+            }
+            Console.WriteLine();
+        }
     }
 }

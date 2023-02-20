@@ -59,6 +59,7 @@ class AES : IAlgorithm {
     }
 
     public void printByteBlock(List<byte[,]> blocks) {
+        Console.WriteLine("Byte-Blocks in List:");
         foreach(byte[,] block in blocks) {
             for(int i = 0; i < 4; i ++) {
                 for(int n = 0; n < 4; n ++) {

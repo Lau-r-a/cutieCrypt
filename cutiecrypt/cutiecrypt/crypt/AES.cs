@@ -58,6 +58,22 @@ class AES : IAlgorithm {
         return result;
     }
 
+    public string byteBlocktoString(List<byte[,]> blocks) {
+        string result = "";
+        byte[] x = new byte[blocks.Count * 16];
+        int k = 0;
+        foreach(byte[,] block in blocks) {
+            for(int i = 0; i < 4; i ++) {
+                for(int n = 0; n < 4; n ++) {
+                    x[k] = block[i, n];
+                    k++;
+                }
+            }
+        }
+        result += System.Text.Encoding.UTF8.GetString(x);
+        return result;
+    }
+
     public void printByteBlock(List<byte[,]> blocks) {
         Console.WriteLine("Byte-Blocks in List:");
         foreach(byte[,] block in blocks) {

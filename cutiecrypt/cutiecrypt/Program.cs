@@ -8,7 +8,8 @@ class Program
         Console.WriteLine("Nikki ist süß <3");
 
         AES aes = new AES();
-        aes.toByteBlock("Nikki ist giga süß <3");
-        aes.printByteBlock(aes.toByteBlock("Nikki ist giga süß <3"));
+        List<byte[,]> blocks = aes.toByteBlock("Nikki ist giga süß <3");
+        aes.printByteBlock(blocks);
+        Console.Write(aes.byteBlocktoString(blocks));
     }
 }

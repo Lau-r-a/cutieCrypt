@@ -15,43 +15,45 @@ class AES : IAlgorithm {
         return "";
     }
 
-    public List<byte[,]> toByteBlock(string plaintext) {
-        byte[] byteArray = Encoding.UTF8.GetBytes(plaintext);
-        List<byte[,]> result = new List<byte[,]>();
-        int i = 0, n = 0;
-        byte[,] block = new byte[,] {
+    private byte[,] emptyBlock() {
+        return new byte[,] {
             {0, 0, 0, 0},
             {0, 0, 0, 0},
             {0, 0, 0, 0},
             {0, 0, 0, 0}
         };
-        for(int k = 0; k < byteArray.Length; k ++) {
+    }
 
-            byte b = byteArray[k];
+    public List<byte[,]> toByteBlock(string plaintext) {
 
-            block[n, i] = b;
+        byte[] byteArray = Encoding.UTF8.GetBytes(plaintext);
+        List<byte[,]> result = new List<byte[,]>();
+
+        int k = 0, n = 0;
+        byte[,] block = emptyBlock();
+
+        for(int i = 0; i < byteArray.Length; i ++) {
+
+            byte b = byteArray[i];
+
+            block[n, k] = b;
             Console.WriteLine("i: " + i + " n: " + n + " b: " + b);
 
-            if(i < 3) {
-                i ++;
-            } else if (i == 3 && n <3) {
+            if(k < 3) {
+                k ++;
+            } else if (n <3) {
                 n ++;
-                i = 0;
+                k = 0;
             } else {
-                Console.WriteLine("Block fertig");
+                //Block finished
                 result.Add(block);
-                i = 0;
+                k = 0;
                 n = 0;
-                block = new byte[,] {
-                    {0, 0, 0, 0},
-                    {0, 0, 0, 0},
-                    {0, 0, 0, 0},
-                    {0, 0, 0, 0}
-                };
+                block = emptyBlock();
             }
 
-            if (k == byteArray.Length - 1) {
-                Console.WriteLine("Block fertig");
+            if (i == byteArray.Length - 1) {
+                //add last block
                 result.Add(block);
             }
         }
@@ -59,19 +61,20 @@ class AES : IAlgorithm {
     }
 
     public string byteBlocktoString(List<byte[,]> blocks) {
-        string result = "";
         byte[] x = new byte[blocks.Count * 16];
         int k = 0;
         foreach(byte[,] block in blocks) {
             for(int i = 0; i < 4; i ++) {
                 for(int n = 0; n < 4; n ++) {
-                    x[k] = block[i, n];
-                    k++;
+                    //ignore zeroes
+                    if (block[i, n] != 0) {
+                        x[k] = block[i, n];
+                        k++;
+                    }
                 }
             }
         }
-        result += System.Text.Encoding.UTF8.GetString(x);
-        return result;
+        return System.Text.Encoding.UTF8.GetString(x);
     }
 
     public void printByteBlock(List<byte[,]> blocks) {
